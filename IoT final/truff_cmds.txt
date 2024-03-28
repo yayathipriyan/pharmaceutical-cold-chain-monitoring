@@ -1,0 +1,13 @@
+truffle unbox pet-shop
+
+truffle compile
+
+ var a =artifacts.require("contr");
+
+module.exports= function(deployer){
+    deployer.deploy(a);
+}
+
+
+
+myenv\Scripts\activate.bat

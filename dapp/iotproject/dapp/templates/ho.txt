@@ -1,0 +1,7 @@
+<html>
+    <h4>Click button to see the data stored in blockchain</h4>
+    <form id="addressForm" method="post" action="{% url 'showdata' %}">
+        {% csrf_token %}
+        <button type="submit">Get Data</button>
+    </form>
+</html>

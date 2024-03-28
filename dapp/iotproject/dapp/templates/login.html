@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Ethereum Address with MetaMask</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* Make the layout vertical */
+        }
+        #txt1{
+            font-family: Arial, sans-serif;
+            font-size: larger;
+            font-weight: 100;
+            font-style:initial;
+        }
+        .container {
+            flex: 1; /* Fill remaining space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .top1 {
+            background-color: black;
+            color: white;
+            width: 100%;
+            height: 20%; /* Take 20% of the screen height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .top2 {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px; /* Add padding for better spacing */
+        }
+        
+        button {
+            border-radius: 20px; /* Make buttons rounded */
+            padding: 10px 20px; /* Add padding to buttons */
+            cursor: pointer;
+        }
+        
+        #addressForm {
+            margin-top: 20px; /* Add space above the form */
+        }
+        
+        #addressForm label {
+            display: block; /* Display labels as block elements */
+            margin-bottom: 5px; /* Add space below each label */
+        }
+        
+        #addressForm input[type="text"] {
+            width: 100%; /* Make input fields full width */
+            padding: 8px; /* Add padding to input fields */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            margin-bottom: 10px; /* Add space below input fields */
+        }
+        
+        #addressForm button[type="submit"] {
+            background-color: #4CAF50; /* Green background color */
+            color: white; /* White text color */
+            border: none; /* Remove border */
+            padding: 10px 20px; /* Add padding */
+            text-align: center; /* Center text */
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 20px; /* Make button rounded */
+        }
+        
+        #addressForm button[type="submit"]:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="top1">
+        <h1>KDart Medicines</h1>
+    </div>
+    <div>
+    <div class="top2">
+        <button id="getAddressBtn" style="margin: 9px;">Get Address</button>
+        <div id="addressDisplay" hidden></div>
+        <!-- Form to submit the Ethereum address -->
+        <form id="addressForm" method="post" action="{% url 'processaddress' %}">
+            {% csrf_token %}
+            <label for="ethereumAddress" style="margin-top: 9px;font-weight: bold;" id="txt1">Enter get address to get address from metamask</label><br>
+            <input type="text" id="ethereumAddress" name="ethereumAddress" required style="margin-top: 5px;"><br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+        {% if data %}
+            <h4 style="margin-top: 9px;text-align: center;margin-left: 50px;padding-left: 40px;font-weight:bold;color: cornflowerblue;" id="txt1">Address not found, Enter correct address</h4>
+        {% endif %} 
+    </div>
+    <script>
+        window.addEventListener('load', async () => {
+            // Check if MetaMask is installed
+            if (window.ethereum) {
+                // Request account access from MetaMask each time the window loads
+                await window.ethereum.enable();
+            } else {
+                console.error('MetaMask is not installed');
+            }
+        });
+
+        document.getElementById('getAddressBtn').addEventListener('click', async () => {
+            try {
+                // Request account access from MetaMask each time the button is clicked
+                await window.ethereum.enable();
+                
+                // Retrieve user's Ethereum account
+                const accounts = await ethereum.request({ method: 'eth_accounts' });
+                const userAccount = accounts[0];
+
+                // Display the user's Ethereum address
+                document.getElementById('addressDisplay').innerText = `Your Ethereum address: ${userAccount}`;
+
+                // Set the fetched address as the value of the input field in the form
+                document.getElementById('ethereumAddress').value = userAccount;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

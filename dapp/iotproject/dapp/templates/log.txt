@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Ethereum Address with MetaMask</title>
+</head>
+<body>
+    <h1>Get Ethereum Address with MetaMask</h1>
+    <button id="getAddressBtn">Get Address</button>
+    <div id="addressDisplay"></div>
+
+    <!-- Form to submit the Ethereum address -->
+    <form id="addressForm" method="post" action="{% url 'processaddress' %}">
+        {% csrf_token %}
+        <label for="ethereumAddress">Ethereum Address:</label><br>
+        <input type="text" id="ethereumAddress" name="ethereumAddress" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    {% if data %}
+       <h4>Address not forund, Enter coeect address</h4>
+    {% endif %} 
+    <script>
+        window.addEventListener('load', async () => {
+            // Check if MetaMask is installed
+            if (window.ethereum) {
+                // Request account access from MetaMask each time the window loads
+                await window.ethereum.enable();
+            } else {
+                console.error('MetaMask is not installed');
+            }
+        });
+
+        document.getElementById('getAddressBtn').addEventListener('click', async () => {
+            try {
+                // Request account access from MetaMask each time the button is clicked
+                await window.ethereum.enable();
+                
+                // Retrieve user's Ethereum account
+                const accounts = await ethereum.request({ method: 'eth_accounts' });
+                const userAccount = accounts[0];
+
+                // Display the user's Ethereum address
+                document.getElementById('addressDisplay').innerText = `Your Ethereum address: ${userAccount}`;
+
+                // Set the fetched address as the value of the input field in the form
+                document.getElementById('ethereumAddress').value = userAccount;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

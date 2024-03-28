@@ -1,0 +1,21 @@
+                parsed_data = Blockchain_data()
+                context={
+                        "data":parsed_data,
+                }  
+                per_page = 10
+                paginator = Paginator(parsed_data, per_page)
+                page = request.GET.get('page')
+                try:
+                    data = paginator.page(page)
+                except PageNotAnInteger:
+                    data = paginator.page(1)
+                except EmptyPage:
+                    data = paginator.page(paginator.num_pages)
+
+                return render(request, 'mainpage.html', {'data': data})
+            else :
+                data="Your address not found !!!!<br/> Enter correct address"
+                context={
+                    "data":data,
+                }
+                return render(request,"login.html",context)

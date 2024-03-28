@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Data</title>
+    <br>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2;
+        }
+        .card {
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f0f0f0; /* Change background color to light gray */
+        }
+        .card-header {
+            background-color: gray;
+            color: white;
+            padding: 8px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bolder;
+        }
+        .card-body {
+            padding: 8px;
+        }
+        .card-body p {
+            margin: 5px 0;
+        }
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .pagination a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #000;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+            transition: background-color 0.3s;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .pagination .current {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Monitored data : </h1>
+    <br><br>
+
+    <div class="card-container">
+        {% for record in data %}
+            <div class="card">
+                <div class="card-header">Record</div>
+                <div class="card-body">
+                    <p><strong>Temperature:</strong> {{ record.temp }}</p>
+                    <p><strong>Humidity:</strong> {{ record.humidity }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination links -->
+    <div class="pagination">
+        {% if data.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ data.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ data.number }} of {{ data.paginator.num_pages }}.</span>
+
+        {% if data.has_next %}
+            <a href="?page={{ data.next_page_number }}">Next</a>
+            <a href="?page={{ data.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </div>
+</body>
+</html>
